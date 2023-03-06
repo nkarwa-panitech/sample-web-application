@@ -44,7 +44,7 @@ pipeline{
                 {
               steps{
                   script{
-		           sh 'cp -r ../devops-training@2/target .'
+		           sh 'cp -r ../e2e@2/target .'
                    sh 'docker build . -t nkarwapanitech/devops-training:$Docker_tag'
 		           withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {
 				    
