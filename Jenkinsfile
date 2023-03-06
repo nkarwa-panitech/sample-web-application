@@ -24,7 +24,7 @@ pipeline{
             }
                   steps{
                       script{
-                      withSonarQubeEnv('sonar') { 
+                      withSonarQubeEnv('sonarserver') { 
                       sh "mvn sonar:sonar"
                        }
                       timeout(time: 1, unit: 'HOURS') {
@@ -33,24 +33,27 @@ pipeline{
                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
                       }
                     }
-		           sh "mvn clean install"
+		    sh "mvn clean install"
                   }
-               stage('build')
+                }  
+              }
+
+
+
+              stage('build')
                 {
               steps{
                   script{
 		           sh 'cp -r ../devops-training@2/target .'
                    sh 'docker build . -t nkarwapanitech/devops-training:$Docker_tag'
-		            withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {
+		           withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {
 				    
-				        sh 'docker login -u nkarwapanitech -p $docker_password'
-				        sh 'docker push nkarwapanitech/devops-training:$Docker_tag'
-			        }
+				  sh 'docker login -u nkarwapanitech -p $docker_password'
+				  sh 'docker push nkarwapanitech/devops-training:$Docker_tag'
+			}
                        }
                     }
                  }
-                }  
-              }
 
 
 
