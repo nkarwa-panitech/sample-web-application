@@ -1,11 +1,3 @@
-currentBuild.displayName = "step_Demo # "+currentBuild.number
-
-   def getDockerTag(){
-        def tag = sh script: 'git rev-parse HEAD', returnStdout: true
-        return tag
-        }
-        
-
 pipeline{
         agent any  
         environment{
@@ -34,8 +26,22 @@ pipeline{
                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
                       }
                     }
-		    sh "mvn clean install"
+		           sh "mvn clean install"
                   }
+               stage('build')
+                {
+              steps{
+                  script{
+		           sh 'cp -r ../devops-training@2/target .'
+                   sh 'docker build . -t nkarwapanitech/devops-training:$Docker_tag'
+		            withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {
+				    
+				        sh 'docker login -u nkarwapanitech -p $docker_password'
+				        sh 'docker push nkarwapanitech/devops-training:$Docker_tag'
+			        }
+                       }
+                    }
+                 }
                 }  
               }
 
