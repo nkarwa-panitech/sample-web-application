@@ -7,10 +7,10 @@ currentBuild.displayName = "Final_Demo # "+currentBuild.number
 
 pipeline{
 	   agent { label 'node01' }
-           tools{
+//            tools{
 
-               maven '3.9.0'
-             } 
+//                maven '3.9.0'
+//              } 
         environment{
 	    Docker_tag = getDockerTag()
         }
@@ -20,12 +20,12 @@ pipeline{
 
               stage('Quality Gate Statuc Check'){
 
-//                agent {
-//                 docker {
-//                 image 'maven'
-//                 args '-v $HOME/.m2:/root/.m2'
-//                 }
-//           }
+               agent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
+          }
                   steps{
                       script{
                       withSonarQubeEnv('sonar') { 
