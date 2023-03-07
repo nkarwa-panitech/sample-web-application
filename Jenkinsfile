@@ -6,7 +6,11 @@ currentBuild.displayName = "Final_Demo # "+currentBuild.number
         }
 
 pipeline{
-	agent {label 'node01'}  
+	   agent { label 'node01' }
+           tools{
+
+               maven '3.9.0'
+             } 
         environment{
 	    Docker_tag = getDockerTag()
         }
