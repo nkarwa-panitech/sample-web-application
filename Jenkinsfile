@@ -40,22 +40,6 @@ pipeline{
 
 
 
-              stage('build')
-                {
-              steps{
-                  script{
-		           sh 'cp -r ../e2e@2/target .'
-                   sh 'docker build . -t nkarwapanitech/devops-training:$Docker_tag'
-		           withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {
-				    
-				  sh 'docker login -u nkarwapanitech -p $docker_password'
-				  sh 'docker push nkarwapanitech/devops-training:$Docker_tag'
-			}
-                       }
-                    }
-                 }
-
-
 
               
 	       
